@@ -1,12 +1,12 @@
 import { Route, Routes } from "react-router-dom"
-import Checkout from "./components/Checkout/Checkout"
-import SuccessPage from "./components/Payment/SuccessPage"
+import Index from "./pages/Checkout/Index"
+import SuccessPage from "./pages/Payment/SuccessPage"
 
 function App() {
 
   return (
     <Routes>
-      <Route path="/" element={<Checkout />} />
+      <Route path="/" element={<Index />} />
       <Route path="/success" element={<SuccessPage />} />
     </Routes>
   )
