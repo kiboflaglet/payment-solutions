@@ -1,14 +1,14 @@
-import Checkout from "./components/Checkout"
-import MyOrders from "./components/MyOrders"
+import { Route, Routes } from "react-router-dom"
+import Checkout from "./components/Checkout/Checkout"
+import SuccessPage from "./components/Payment/SuccessPage"
 
 function App() {
 
   return (
-    <>
-      <Checkout />
-      <MyOrders />
-    </>
-
+    <Routes>
+      <Route path="/" element={<Checkout />} />
+      <Route path="/success" element={<SuccessPage />} />
+    </Routes>
   )
 }
 

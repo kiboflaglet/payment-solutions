@@ -1,9 +1,9 @@
 import axios from "axios"
 import React, { useEffect } from "react"
-import { type OrderItem, type Product } from "../types"
-import type { serviceResponse } from "../common/backend/types"
+import type { serviceResponse } from "../../common/backend/types"
+import { type OrderItem, type Product } from "./types"
 
-function Checkout() {
+function Products() {
 
   const [products, setProducts] = React.useState<Product[]>([])
   const [localCart, setLocalCart] = React.useState<Omit<OrderItem, "id" | "orderId">[]>([])
@@ -27,7 +27,6 @@ function Checkout() {
       })
       .catch(res => {
         setError(res.data?.message)
-
       })
   }
 
@@ -46,6 +45,10 @@ function Checkout() {
       })
   }
 
+  
+
+
+
   useEffect(() => {
     fetchProducts()
   }, [])
@@ -59,10 +62,10 @@ function Checkout() {
       {error && (<span>{error}</span>)}
       {apiMessage && (<span>{apiMessage}</span>)}
 
+
       <div className="checkout-container">
         <div>
           <h3>Products</h3>
-
 
           <table>
             <thead>
@@ -121,4 +124,4 @@ function Checkout() {
   )
 }
 
-export default Checkout
+export default Products

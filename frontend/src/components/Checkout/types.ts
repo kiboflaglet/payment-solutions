@@ -4,9 +4,15 @@ export interface Product {
     price: number;
 }
 
+export const OrderTypes = {
+    pending: "Pending",
+    failed: "Failed",
+    paid: "Paid",
+} as const
+
 export interface Order {
     id: number;
-    status: 'pending' | 'failed' | 'paid';
+    status: keyof typeof OrderTypes
     total: number;
     createdAt: string;
     OrderItems: OrderItem[]
@@ -17,4 +23,8 @@ export interface OrderItem {
     quantity: number;
     productId: number;
     orderId: number
+}
+
+export interface CheckoutRedirect {
+    url: string | null
 }
