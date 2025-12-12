@@ -1,24 +1,55 @@
+import prisma from "@/lib/prisma";
 import { Product } from "./products.model";
 
-const products: Product[] = [
-    {
-        id: "1",
-        title: "T-Shirt",
-        price: 100
-    },
-    {
-        id: "2",
-        title: "Pants",
-        price: 200
-    },
-]
 
 export class ProductRepository {
     async findAllProducts(): Promise<Product[]> {
-        return products
+        const res = await prisma.product.findMany({
+            select: {
+                id: true,
+                title: true,
+                price: true
+            }
+        })
+
+        return res
     }
 
-    async findProductById(id: string): Promise<Product | null> {
-        return products.find(item => item.id === id) || null
+    async findProduct(id: number): Promise<Product | null> {
+        const res = await prisma.product.findFirstOrThrow({
+            where: { id },
+            select: {
+                id: true,
+                title: true,
+                price: true
+            }
+        })
+
+        return res
+    }
+
+    async createProduct(data: Omit<Product, 'id'>): Promise<Product> {
+        const res = await prisma.product.create({
+            data
+        })
+
+        return res
+    }
+
+    async updateProduct(id: number, data: Partial<Product>): Promise<Product> {
+        const res = await prisma.product.update({
+            where: { id },
+            data
+        })
+
+        return res
+    }
+
+    async deleteProduct(id: number): Promise<null> {
+        await prisma.product.delete({
+            where: { id },
+        })
+
+        return null
     }
 }
