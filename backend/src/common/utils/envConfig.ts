@@ -5,7 +5,10 @@ dotenv.config()
 const envSchema = z.object({
     NODE_ENV: z.enum(['development', 'production', 'test']).default('production'),
     HOST: z.string().min(1).default('localhost'),
-    PORT: z.coerce.number().int().positive().default(8080)
+    PORT: z.coerce.number().int().positive().default(8080),
+    STRIPE_SECRET_KEY: z.string().min(1),
+    FRONTEND_PAYMENT_SUCCESS_URL: z.string().min(1),
+    FRONTEND_PAYMENT_FAILED_URL: z.string().min(1)
 })
 
 const parsedEnv = envSchema.safeParse(process.env)

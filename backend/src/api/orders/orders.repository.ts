@@ -1,4 +1,4 @@
-import prisma from "@/lib/prisma"
+import prisma from "@/common/utils/prisma"
 import { Order, OrderCreate, OrderItem } from "./orders.model"
 
 export class OrderRepository {

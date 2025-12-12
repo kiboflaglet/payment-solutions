@@ -4,6 +4,8 @@ import { openAPIRouter } from "./api-docs/openAPI.router"
 import { productsRoute } from "./api/products/products.router"
 import { orderRoute } from "./api/orders/orders.router"
 import cors from 'cors'
+import { checkoutRoute } from "./api/checkout/checkout.router"
+
 const app: Express = express()
 app.use(express.json())
 app.use(cors())
@@ -13,6 +15,7 @@ apiRouterV1.use('/health', healthRouter)
 apiRouterV1.use('/swagger', openAPIRouter)
 apiRouterV1.use('/products', productsRoute)
 apiRouterV1.use('/orders', orderRoute)
+apiRouterV1.use('/checkout', checkoutRoute)
 
 app.use("/api/v1", apiRouterV1)
 
