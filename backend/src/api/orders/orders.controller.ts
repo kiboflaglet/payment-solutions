@@ -21,8 +21,6 @@ export class OrderController {
 
         const result = await orderService.create(orderItemsValidated.data)
         res.status(result.statusCode).send(result)
-
-
     }
 }
 
