@@ -20,8 +20,8 @@ React.useEffect(() => {
 
   return (
     <>
-      <h1 className="text-5xl">Shop with Stripe</h1>
-      <h1 className="text-3xl">
+      <h1 className="text-5xl">Stripe payment (Testing)</h1>
+      <h1 className="text-3xl text-text/50">
         Server status: {status === null ? "checking..." : status ? "up" : "down"}
       </h1>
     </>

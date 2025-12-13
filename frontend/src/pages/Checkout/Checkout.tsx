@@ -116,19 +116,19 @@ function Checkout() {
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 w-full">
-      <div className="border rounded-lg p-4 flex flex-col gap-4 bg-background">
+      <div className=" bg-background-100 border-background-200 border rounded-xl p-4 flex flex-col gap-4 bg-background">
         {/* Header */}
-        <h1 className="text-2xl font-semibold">
+        <h1 className="text-2xl font-semibold ">
           Add product to the cart
         </h1>
 
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
 
           <div>
-            <h3 className="font-medium mb-2">Products</h3>
+            <h3 className="font-medium mb-2 text-text/50">Products</h3>
             <div className="overflow-hidden">
               <table className="w-full text-start  [&_th]:text-start text-sm ">
-                <thead className="[&>tr>th]:border [&>tr>th]:px-2 [&>tr>th]:py-1 ">
+                <thead className="[&>tr>th]:border-background-300  [&>tr>th]:border [&>tr>th]:px-2 [&>tr>th]:py-1 ">
                   <tr>
                     <th>ID</th>
                     <th>Title</th>
@@ -136,7 +136,7 @@ function Checkout() {
                     <th>Action</th>
                   </tr>
                 </thead>
-                <tbody className="[&>tr>td]:border [&>tr>td]:px-2 [&>tr>td]:py-1">
+                <tbody className="[&>tr>td]:border-background-300  [&>tr>td]:border [&>tr>td]:px-2 [&>tr>td]:py-1">
                   {products.map(item => (
                     <tr key={item.id}>
                       <td>{item.id}</td>
@@ -157,10 +157,10 @@ function Checkout() {
             </div>
           </div>
           <div>
-            <h3 className="font-medium mb-2">Local Cart</h3>
+            <h3 className=" mb-2 text-text/50">Local Cart</h3>
             <div className="  overflow-hidden">
               <table className="w-full text-start  [&_th]:text-start text-sm ">
-                <thead className="[&>tr>th]:border [&>tr>th]:px-2 [&>tr>th]:py-1 ">
+                <thead className="[&>tr>th]:border-background-300  [&>tr>th]:border [&>tr>th]:px-2 [&>tr>th]:py-1 ">
                   <tr>
                     <th>Product id</th>
                     <th>Quantity</th>
@@ -168,7 +168,8 @@ function Checkout() {
                 </thead>
                 {!!localCart.length ? (
 
-                  <tbody className="[&>tr>td]:border [&>tr>td]:px-2 [&>tr>td]:py-1">
+                  <tbody className="[&>tr>td]:border-background-300  [&>tr>td]:border [&>tr>td]:px-2 [&>tr>td]:py-1">
+
                     {localCart.map((item, index) => (
                       <tr key={index}>
                         <td>{item.productId}</td>
@@ -178,7 +179,8 @@ function Checkout() {
                     ))}
                   </tbody>
                 ) : (
-                  <tbody className="[&>tr>td]:border [&>tr>td]:px-2 [&>tr>td]:py-1">
+                  <tbody className="[&>tr>td]:border-background-300  [&>tr>td]:border [&>tr>td]:px-2 [&>tr>td]:py-1">
+
 
                     <tr>
                       <td colSpan={2} className="p-2 text-center opacity-55">
@@ -192,7 +194,7 @@ function Checkout() {
           </div>
         </div>
 
-        <div className="mt-auto flex items-center  justify-end  border-t pt-3">
+        <div className="mt-auto flex items-center  justify-end  border-t border-background-300 pt-3">
           <span className="text-sm opacity-70 mr-5">
             {placeOrderLoading
               ? "Creating order..."
@@ -208,7 +210,8 @@ function Checkout() {
 
       </div>
 
-      <div className="border rounded-lg p-4 flex flex-col bg-background">
+      <div className=" bg-background-100 border-background-200 border rounded-xl p-4 flex flex-col gap-4 bg-background">
+
         <div className="flex items-center gap-5 mb-4">
           <h1 className="text-2xl font-semibold ">
             Orders
@@ -220,8 +223,9 @@ function Checkout() {
           </div>
         </div>
         <div className="flex-1 overflow-auto   max-h-[60vh] ">
-          <table className="w-full text-start  [&_th]:text-start text-sm">
-            <thead className="[&>tr>th]:border [&>tr>th]:px-2 [&>tr>th]:py-1 ">
+          <table className="w-full text-start  [&_th]:text-start text-sm ">
+            <thead className="[&>tr>th]:border-background-300  [&>tr>th]:border [&>tr>th]:px-2 [&>tr>th]:py-1 ">
+
               <tr>
                 <th>ID</th>
                 <th>status</th>
@@ -231,7 +235,8 @@ function Checkout() {
                 <th>Action</th>
               </tr>
             </thead>
-            <tbody className="[&>tr>td]:border [&>tr>td]:px-2 [&>tr>td]:py-1">
+            <tbody className="[&>tr>td]:border-background-300  [&>tr>td]:border [&>tr>td]:px-2 [&>tr>td]:py-1">
+
               {!!sortedOrders.length && sortedOrders.map(item => (
                 <tr key={item.id}>
                   <td>{item.id}</td>
