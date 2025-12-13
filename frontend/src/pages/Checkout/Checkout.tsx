@@ -1,8 +1,9 @@
 import axios from "axios"
 import React, { useEffect } from "react"
 import type { serviceResponse } from "../../common/backend/types"
-import { type CheckoutRedirect, type Order, type OrderItem, type Product } from "./types"
 import Button from "../../common/components/Button"
+import { type CheckoutRedirect, type Order, type OrderItem, type Product } from "./types"
+import { format } from "date-fns"
 
 function Checkout() {
 
@@ -35,12 +36,18 @@ function Checkout() {
   const [placeOrderMessage, setPlaceOrderMessage] = React.useState<string | null>(null)
 
   const placeOrder = () => {
+    if (!localCart.length) {
+      setPlaceOrderMessage("Local cart is empty, please add product")
+      return;
+    }
     setPlaceOrderLoading(true)
     axios.post<serviceResponse<Product | null>>(import.meta.env.VITE_BACKEND_URL + "/orders", {
       items: localCart
     })
       .then(res => {
-        setPlaceOrderMessage(res.data.message)
+        setPlaceOrderMessage(res.data.message + ", ID: " + res.data.responseObject?.id)
+        fetchOrders()
+        setLocalCart([])
         setError(null)
       })
       .catch((err) => {
@@ -52,6 +59,16 @@ function Checkout() {
   }
 
   const [orders, setOrders] = React.useState<Order[]>([])
+  const sortedOrders = React.useMemo(() => {
+    return [...orders]
+      .sort(
+        (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      )
+      .map(item => ({
+        ...item,
+        createdAt: format(item.createdAt, "dd.MM.yyyy HH:mm")
+      }))
+  }, [orders])
 
   const fetchOrders = () => {
 
@@ -98,96 +115,112 @@ function Checkout() {
 
 
   return (
-    <div className="flex gap-10 ">
-      <div className="border-2 rounded-md  w-full p-2 items-start">
-        <div className="flex gap-10 items-center align-middle">
-          <h1 className="text-3xl">Add products to the cart</h1>
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 w-full">
+      <div className="border rounded-lg p-4 flex flex-col gap-4 bg-background">
+        {/* Header */}
+        <h1 className="text-2xl font-semibold">
+          Add product to the cart
+        </h1>
 
-        </div>
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
 
-        <div className="mt-5   gap-10 items-start">
-          <div className="w-full">
-            <h3>Products</h3>
-            <table className="w-full text-start border border-collapse [&_th]:text-start ">
-              <thead className="[&>tr>th]:border [&>tr>th]:px-2 [&>tr>th]:py-1 ">
-                <tr>
-                  <th>ID</th>
-                  <th>Title</th>
-                  <th>price</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody className="[&>tr>td]:border [&>tr>td]:px-2 [&>tr>td]:py-1">
-                {products.map(item => (
-                  <tr key={item.id}>
-                    <td>{item.id}</td>
-                    <td>{item.title}</td>
-                    <td>{item.price}</td>
-                    <td>
-                      <Button
-                        onClick={() => addProductToCart(item)}
-                      >
-                        + Add to cart
-                      </Button>
-
-                    </td>
+          <div>
+            <h3 className="font-medium mb-2">Products</h3>
+            <div className="overflow-hidden">
+              <table className="w-full text-start  [&_th]:text-start text-sm ">
+                <thead className="[&>tr>th]:border [&>tr>th]:px-2 [&>tr>th]:py-1 ">
+                  <tr>
+                    <th>ID</th>
+                    <th>Title</th>
+                    <th>price</th>
+                    <th>Action</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-
-          <div className="w-full">
-            <h3>Local Cart</h3>
-            <table className="w-full text-start border border-collapse [&_th]:text-start ">
-              <thead className="[&>tr>th]:border [&>tr>th]:px-2 [&>tr>th]:py-1 ">
-                <tr>
-                  <th>Product id</th>
-                  <th>Quantity</th>
-                </tr>
-              </thead>
-              {!!localCart.length ? (
-
+                </thead>
                 <tbody className="[&>tr>td]:border [&>tr>td]:px-2 [&>tr>td]:py-1">
-                  {localCart.map((item, index) => (
-                    <tr key={index}>
-                      <td>{item.productId}</td>
-                      <td>{item.quantity}</td>
+                  {products.map(item => (
+                    <tr key={item.id}>
+                      <td>{item.id}</td>
+                      <td>{item.title}</td>
+                      <td>{item.price}</td>
+                      <td>
+                        <Button
+                          onClick={() => addProductToCart(item)}
+                        >
+                          + Add to cart
+                        </Button>
 
+                      </td>
                     </tr>
                   ))}
                 </tbody>
-              ) : (
-                <tbody>
-                  <tr>
-                    <td colSpan={2} className="p-2 text-center opacity-55">
-                      Empty
-                    </td>
-                  </tr>
-                </tbody>
-              )}
-            </table>
+              </table>
+            </div>
           </div>
+          <div>
+            <h3 className="font-medium mb-2">Local Cart</h3>
+            <div className="  overflow-hidden">
+              <table className="w-full text-start  [&_th]:text-start text-sm ">
+                <thead className="[&>tr>th]:border [&>tr>th]:px-2 [&>tr>th]:py-1 ">
+                  <tr>
+                    <th>Product id</th>
+                    <th>Quantity</th>
+                  </tr>
+                </thead>
+                {!!localCart.length ? (
 
+                  <tbody className="[&>tr>td]:border [&>tr>td]:px-2 [&>tr>td]:py-1">
+                    {localCart.map((item, index) => (
+                      <tr key={index}>
+                        <td>{item.productId}</td>
+                        <td>{item.quantity}</td>
+
+                      </tr>
+                    ))}
+                  </tbody>
+                ) : (
+                  <tbody className="[&>tr>td]:border [&>tr>td]:px-2 [&>tr>td]:py-1">
+
+                    <tr>
+                      <td colSpan={2} className="p-2 text-center opacity-55">
+                        Empty (click on Add to Cart)
+                      </td>
+                    </tr>
+                  </tbody>
+                )}
+              </table>
+            </div>
+          </div>
         </div>
-        <div className="mt-5 flex w-full justify-between items-center">
-          <span>{placeOrderLoading ? "Order is creating..." : error ?? placeOrderMessage}</span>
+
+        <div className="mt-auto flex items-center  justify-end  border-t pt-3">
+          <span className="text-sm opacity-70 mr-5">
+            {placeOrderLoading
+              ? "Creating order..."
+              : error ?? placeOrderMessage}
+          </span>
+
           <Button
-            disabled={!localCart.length}
             onClick={placeOrder}
-          >Place the order 🛒</Button>
-
+          >
+            Place order
+          </Button>
         </div>
+
       </div>
-      <div className="border-2 rounded-md  w-full p-2 items-start">
-        <div className="flex gap-10 items-center align-middle">
-          <h1 className="text-3xl">My orders (From Database)</h1>
 
+      <div className="border rounded-lg p-4 flex flex-col bg-background">
+        <div className="flex items-center gap-5 mb-4">
+          <h1 className="text-2xl font-semibold ">
+            Orders
+          </h1>
+          <div className=" text-sm opacity-70">
+            {paymentLoading
+              ? "Payment processing..."
+              : paymentError ?? paymentResponseMessage}
+          </div>
         </div>
-
-        <div className="mt-5 items-start">
-          <h3>Orders</h3>
-          <table className="w-full text-start border border-collapse [&_th]:text-start ">
+        <div className="flex-1 overflow-auto   max-h-[60vh] ">
+          <table className="w-full text-start  [&_th]:text-start text-sm">
             <thead className="[&>tr>th]:border [&>tr>th]:px-2 [&>tr>th]:py-1 ">
               <tr>
                 <th>ID</th>
@@ -195,11 +228,11 @@ function Checkout() {
                 <th>total</th>
                 <th>date</th>
                 <th>products</th>
-                <th>Pay</th>
+                <th>Action</th>
               </tr>
             </thead>
             <tbody className="[&>tr>td]:border [&>tr>td]:px-2 [&>tr>td]:py-1">
-              {!!orders.length && orders.map(item => (
+              {!!sortedOrders.length && sortedOrders.map(item => (
                 <tr key={item.id}>
                   <td>{item.id}</td>
                   <td>{item.status}</td>
@@ -215,16 +248,14 @@ function Checkout() {
                   <td>
                     <Button
                       onClick={() => payWithStripe(item.id)}
-                    >Pay with Stripe</Button>
+                    >Pay</Button>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
-      </div>
-      <div className="mt-5 flex justify-between items-center">
-        <span>{paymentLoading ? "Payment processing..." : paymentError ?? paymentResponseMessage}</span>
+
       </div>
     </div>
 

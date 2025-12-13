@@ -13,6 +13,7 @@ const SuccessPage = () => {
   return (
     <div>
       Success page
+      {sessionId}
     </div>
   )
 }

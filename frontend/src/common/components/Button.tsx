@@ -8,7 +8,7 @@ const Button = ({
 }: ButtonType) => {
     return (
         <button
-            className={`border-2 px-2 py-1 rounded-md cursor-pointer ${className ?? ""}`}
+            className={`border-1  px-2 py-1 rounded-md cursor-pointer ${className ?? ""}`}
             {...props}
         />
     )
